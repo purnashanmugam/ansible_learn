@@ -1,0 +1,42 @@
+---
+
+- hosts: ubuntu_hosts
+  tasks:
+    - name: "Install wget" 
+      package: name=wget state=present
+    - include: incl.yml
+    - name: Download file from a file path
+      get_url:
+        url: "{{ item }}"
+        dest: /tmp/afilecopy.txt
+      with_items:
+        - https://www.w3.org/TR/PNG/iso_8859-1.txt
+        - http://25.io/toau/audio/sample.txt
+    - name: ansible create directory example
+      file:
+        path: /home/ubuntu/ansible_docs
+        state: directory
+    - name: copying file from here to there
+      copy:
+        src: /home/ubuntu/ANSIBLE-LEARN/Sample/a.txt
+        dest: /home/ubuntu/ansible_docs
+    - name: copying python file from here to there
+      copy:
+        src: /home/ubuntu/ANSIBLE-LEARN/Sample/sample.py
+        dest: /home/ubuntu/ansible_docs
+    - name: running python file
+      command: python3  /home/ubuntu/ansible_docs/sample.py
+      register: out2
+    - name: running python file
+      command: python3  /home/ubuntu/ansible_docs/sample.py
+      register: out
+    - debug: var=out.stdout_lines
+    - debug: var=out2.stdout_lines
+    - name: copying python file from here to there
+      copy:
+        src: /home/ubuntu/ANSIBLE-LEARN/Sample/sample2.py
+        dest: /home/ubuntu/ansible_docs
+    - name: running python file
+      command: python3  /home/ubuntu/ansible_docs/sample2.py this is sample of sys args
+      register: out3
+    - debug: var=out3.stdout_lines
